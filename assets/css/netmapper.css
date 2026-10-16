@@ -1,0 +1,451 @@
+/*
+ * Network mapper module. Module assets are loaded on every frontend page,
+ * so every rule is scoped under ".netmapper".
+ */
+
+.netmapper {
+	--nm-border: rgba(127, 127, 127, .35);
+	--nm-muted: rgba(127, 127, 127, .9);
+	--nm-panel-bg: rgba(127, 127, 127, .06);
+	--nm-node-bg: #ffffff;
+	--nm-monitored: #2e9e4f;
+	--nm-new: #e0832c;
+	--nm-selected: #1f65f4;
+	--nm-lldp: #2f7ed8;
+	--nm-mac: #9a9a9a;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.netmapper [hidden] {
+	display: none !important;
+}
+
+html[color-scheme="dark"] .netmapper,
+html[theme="dark-theme"] .netmapper,
+html[theme="hc-dark"] .netmapper {
+	--nm-node-bg: #2b2b2b;
+	--nm-panel-bg: rgba(255, 255, 255, .04);
+}
+
+/* Toolbar */
+
+.netmapper .nm-toolbar {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 8px 10px;
+	border: 1px solid var(--nm-border);
+	background: var(--nm-panel-bg);
+}
+
+.netmapper .nm-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 6px 14px;
+}
+
+.netmapper .nm-field {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.netmapper .nm-field > label {
+	color: var(--nm-muted);
+	font-size: 11px;
+}
+
+.netmapper .nm-field-wide input {
+	width: 420px;
+	max-width: 60vw;
+}
+
+.netmapper .nm-checks {
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+}
+
+.netmapper .nm-checks > label:first-child {
+	margin-right: 4px;
+}
+
+.netmapper .nm-buttons,
+.netmapper .nm-actions {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.netmapper .nm-status {
+	margin-left: 8px;
+	color: var(--nm-muted);
+}
+
+/* Map + side panel */
+
+.netmapper .nm-main {
+	display: flex;
+	gap: 8px;
+	height: calc(100vh - 330px);
+	min-height: 420px;
+}
+
+.netmapper .nm-canvas {
+	flex: 1;
+	border: 1px solid var(--nm-border);
+	overflow: hidden;
+	position: relative;
+	touch-action: none;
+}
+
+.netmapper .nm-svg {
+	width: 100%;
+	height: 100%;
+	cursor: grab;
+	user-select: none;
+}
+
+.netmapper .nm-svg:active {
+	cursor: grabbing;
+}
+
+.netmapper .nm-panel {
+	width: 360px;
+	flex-shrink: 0;
+	overflow-y: auto;
+	padding: 8px 10px;
+	border: 1px solid var(--nm-border);
+	background: var(--nm-panel-bg);
+}
+
+.netmapper .nm-panel h4 {
+	margin: 0 0 6px;
+	font-size: 14px;
+	word-break: break-word;
+}
+
+.netmapper .nm-panel h5 {
+	margin: 12px 0 4px;
+	font-size: 12px;
+}
+
+.netmapper .nm-panel-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 8px 0;
+}
+
+.netmapper .nm-host {
+	padding: 4px 6px;
+	border-left: 3px solid var(--nm-monitored);
+}
+
+.netmapper .nm-host-new {
+	border-left-color: var(--nm-new);
+}
+
+.netmapper .nm-props {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.netmapper .nm-props th,
+.netmapper .nm-props td {
+	padding: 2px 4px;
+	border-bottom: 1px solid var(--nm-border);
+	text-align: left;
+	vertical-align: top;
+	word-break: break-word;
+}
+
+.netmapper .nm-props th {
+	width: 95px;
+	color: var(--nm-muted);
+	font-weight: normal;
+}
+
+.netmapper .nm-clickable {
+	cursor: pointer;
+}
+
+.netmapper .nm-clickable:hover td {
+	text-decoration: underline;
+}
+
+.netmapper .nm-role-uplink { color: var(--nm-lldp); }
+.netmapper .nm-role-access { color: var(--nm-monitored); }
+.netmapper .nm-role-shared { color: var(--nm-muted); }
+
+.netmapper .nm-kv {
+	list-style: none;
+	margin: 6px 0;
+	padding: 0;
+}
+
+.netmapper .nm-kv li {
+	display: flex;
+	justify-content: space-between;
+	padding: 2px 0;
+	border-bottom: 1px solid var(--nm-border);
+}
+
+.netmapper .nm-hint {
+	color: var(--nm-muted);
+	margin: 4px 0;
+}
+
+.netmapper .nm-legend {
+	margin-top: 10px;
+	display: grid;
+	gap: 4px;
+}
+
+.netmapper .nm-legend i {
+	display: inline-block;
+	width: 22px;
+	height: 0;
+	vertical-align: middle;
+	border-top: 3px solid;
+}
+
+.netmapper .nm-legend .nm-legend-lldp { border-color: var(--nm-lldp); }
+.netmapper .nm-legend .nm-legend-mac { border-top-style: dashed; border-color: var(--nm-mac); }
+.netmapper .nm-legend .nm-legend-monitored,
+.netmapper .nm-legend .nm-legend-new {
+	width: 12px;
+	height: 12px;
+	border: 2px solid var(--nm-monitored);
+	border-radius: 50%;
+}
+.netmapper .nm-legend .nm-legend-new { border: 2px dashed var(--nm-new); }
+
+/* SVG elements */
+
+.netmapper .nm-link line {
+	stroke: var(--nm-lldp);
+	stroke-width: 2.5;
+}
+
+.netmapper .nm-link-mac line {
+	stroke: var(--nm-mac);
+	stroke-width: 1.6;
+	stroke-dasharray: 6 4;
+}
+
+.netmapper .nm-port {
+	font-size: 10px;
+	fill: currentColor;
+	paint-order: stroke;
+	stroke: var(--nm-node-bg);
+	stroke-width: 3px;
+	pointer-events: none;
+}
+
+.netmapper .nm-node {
+	cursor: pointer;
+	color: inherit;
+}
+
+.netmapper .nm-node-bg {
+	fill: var(--nm-node-bg);
+	stroke: var(--nm-new);
+	stroke-width: 2;
+	stroke-dasharray: 4 3;
+}
+
+.netmapper .nm-monitored .nm-node-bg {
+	stroke: var(--nm-monitored);
+	stroke-dasharray: none;
+	stroke-width: 2.5;
+}
+
+.netmapper .nm-provisional .nm-node-bg {
+	stroke: var(--nm-mac);
+	stroke-dasharray: 2 3;
+}
+
+.netmapper .nm-selected .nm-node-bg {
+	stroke: var(--nm-selected);
+	stroke-width: 3.5;
+	stroke-dasharray: none;
+}
+
+.netmapper .nm-icon {
+	color: inherit;
+}
+
+.netmapper .nm-label {
+	font-size: 12px;
+	font-weight: bold;
+	fill: currentColor;
+	paint-order: stroke;
+	stroke: var(--nm-node-bg);
+	stroke-width: 3px;
+}
+
+.netmapper .nm-sublabel {
+	font-size: 10px;
+	fill: var(--nm-muted);
+}
+
+.netmapper .nm-badge circle {
+	fill: var(--nm-new);
+}
+
+.netmapper .nm-badge path {
+	stroke: #ffffff;
+	stroke-width: 2;
+}
+
+.netmapper .nm-badge:hover circle {
+	fill: var(--nm-selected);
+}
+
+.netmapper .nm-dot-pending {
+	fill: var(--nm-lldp);
+}
+
+/* Log */
+
+.netmapper .nm-log {
+	height: 120px;
+	overflow-y: auto;
+	padding: 4px 8px;
+	border: 1px solid var(--nm-border);
+	font-family: monospace;
+	font-size: 11px;
+	white-space: pre-wrap;
+}
+
+.netmapper .nm-log-error { color: #d64e4e; }
+.netmapper .nm-log-warning { color: var(--nm-new); }
+
+/* Modal */
+
+.netmapper .nm-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, .45);
+}
+
+.netmapper .nm-modal-backdrop[hidden] {
+	display: none;
+}
+
+.netmapper .nm-modal {
+	width: min(860px, 94vw);
+	max-height: 90vh;
+	display: flex;
+	flex-direction: column;
+	background: var(--nm-node-bg);
+	border: 1px solid var(--nm-border);
+	box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+}
+
+.netmapper .nm-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 14px;
+	border-bottom: 1px solid var(--nm-border);
+}
+
+.netmapper .nm-modal-header h4 {
+	margin: 0;
+	font-size: 14px;
+}
+
+.netmapper .nm-modal-body {
+	padding: 10px 14px;
+	overflow-y: auto;
+}
+
+.netmapper .nm-modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 6px;
+	padding: 10px 14px;
+	border-top: 1px solid var(--nm-border);
+}
+
+.netmapper .nm-form-row {
+	display: grid;
+	grid-template-columns: 140px 1fr;
+	gap: 8px;
+	align-items: start;
+	margin-bottom: 8px;
+}
+
+.netmapper .nm-form-row input[type="text"],
+.netmapper .nm-form-row select,
+.netmapper .nm-form-row textarea,
+.netmapper .nm-paste textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.netmapper .nm-commands {
+	margin: 8px 0;
+	padding: 6px 8px;
+	border: 1px solid var(--nm-border);
+}
+
+.netmapper .nm-command-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	margin: 3px 0;
+}
+
+.netmapper .nm-command-label {
+	width: 210px;
+	color: var(--nm-muted);
+}
+
+.netmapper .nm-command-row code {
+	padding: 1px 6px;
+	border: 1px solid var(--nm-border);
+	cursor: copy;
+	font-size: 12px;
+}
+
+.netmapper .nm-command-row code.nm-copied {
+	border-color: var(--nm-monitored);
+}
+
+.netmapper .nm-paste {
+	margin-bottom: 6px;
+}
+
+.netmapper .nm-paste label {
+	display: block;
+	color: var(--nm-muted);
+	margin-bottom: 2px;
+}
+
+.netmapper .nm-paste textarea {
+	font-family: monospace;
+	font-size: 11px;
+}
+
+.netmapper .nm-merge {
+	display: flex;
+	gap: 4px;
+	margin: 6px 0;
+}
+
+.netmapper .nm-merge-select {
+	flex: 1;
+	min-width: 0;
+}

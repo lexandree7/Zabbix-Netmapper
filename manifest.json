@@ -1,0 +1,60 @@
+{
+	"manifest_version": 2.0,
+	"id": "amg_netmapper",
+	"name": "Network mapper",
+	"version": "1.0.0",
+	"namespace": "NetMapper",
+	"author": "AMG",
+	"description": "Interactive discovery of active IP addresses, device identification (HTTP/HTTPS, SSH, Telnet, SNMP, EtherNet/IP) and physical topology mapping (LLDP, CDP, MAC address tables) for IT/OT networks. Read-only towards devices.",
+	"actions": {
+		"netmapper.view": {
+			"class": "NetMapperView",
+			"view": "netmapper.view"
+		},
+		"netmapper.scan": {
+			"class": "NetMapperScan",
+			"layout": "layout.json"
+		},
+		"netmapper.identify": {
+			"class": "NetMapperIdentify",
+			"layout": "layout.json"
+		},
+		"netmapper.neighbors": {
+			"class": "NetMapperNeighbors",
+			"layout": "layout.json"
+		},
+		"netmapper.cli.parse": {
+			"class": "NetMapperCliParse",
+			"layout": "layout.json"
+		},
+		"netmapper.host.create": {
+			"class": "NetMapperHostCreate",
+			"layout": "layout.json"
+		},
+		"netmapper.map.save": {
+			"class": "NetMapperMapSave",
+			"layout": "layout.json"
+		},
+		"netmapper.settings.update": {
+			"class": "NetMapperSettingsUpdate",
+			"layout": "layout.json"
+		}
+	},
+	"assets": {
+		"css": [
+			"netmapper.css"
+		]
+	},
+	"config": {
+		"max_targets": 4096,
+		"scan_chunk_size": 64,
+		"tcp_timeout_ms": 800,
+		"tcp_concurrency": 64,
+		"snmp_timeout_ms": 1500,
+		"snmp_retries": 1,
+		"fping_path": "/usr/sbin/fping",
+		"tcp_ports_minimal": "22,23,80,443",
+		"tcp_ports_standard": "21,22,23,80,102,135,443,445,502,554,1911,3389,4840,8080,8443,9100,20000,44818",
+		"http_timeout_ms": 3000
+	}
+}
